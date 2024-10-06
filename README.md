@@ -24,6 +24,11 @@ plugins {
 libraryExporter {
     // excludeDependency(String), excludeRepository(URI), exportType(ExportType), parentModule(Project), addModules(Project...)
 }
+
+// WARNING! The configurations must be marked as resolved
+configurations.compileOnly.configure {
+  isCanBeResolved = true
+}
 ```
 
 Alternatively, the plugin can be added to the buildscript classpath and applied:

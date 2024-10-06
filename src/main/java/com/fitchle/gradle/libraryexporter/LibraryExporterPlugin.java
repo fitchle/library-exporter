@@ -17,18 +17,11 @@ public final class LibraryExporterPlugin implements Plugin<Project> {
     @Override
     public void apply(Project target) {
         LibraryExporterExtension extension = target.getExtensions().create("libraryExporter", LibraryExporterExtension.class);
-        target.allprojects(pr -> {
-            pr.getConfigurations().getByName("compileOnly").setCanBeResolved(true);
-            pr.getConfigurations().getByName("api").setCanBeResolved(true);
-        });
 
         this.exportDependencyTask = target.getTasks().register("exportDependencies", ExportDependencyTask.class, extension);
         this.bundleLibrariesTask = target.getTasks().register("bundleLibraries", BundleLibrariesTask.class, extension);
         this.exportDependencyTask.configure(t -> t.setGroup("exporting"));
         this.bundleLibrariesTask.configure(t -> t.setGroup("exporting"));
-
-        target.getTasks().named("build", t -> t.finalizedBy(exportDependencyTask));
-        exportDependencyTask.get().finalizedBy(bundleLibrariesTask);
     }
 
     public TaskProvider<BundleLibrariesTask> getBundleLibrariesTask() {

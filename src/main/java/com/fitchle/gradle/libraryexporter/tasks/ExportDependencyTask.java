@@ -40,10 +40,10 @@ public abstract class ExportDependencyTask extends DefaultTask {
     public void run() {
         if (!extension.isLibraryExport()) return;
 
-        File buildDir = new File(project.getBuildDir(), ConfigurationProperty.BASE_DIR);
+        final File buildDir = new File(project.getBuildDir(), ConfigurationProperty.BASE_DIR);
         if (!buildDir.exists()) buildDir.mkdirs();
 
-        export(this.project);
+        this.export(this.project);
     }
 
     public void export(Project project) {

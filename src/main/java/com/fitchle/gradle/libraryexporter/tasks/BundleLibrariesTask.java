@@ -26,11 +26,7 @@ public abstract class BundleLibrariesTask extends DefaultTask {
     @TaskAction
     public void run() {
         if (!extension.isModuleEnabled() || extension.getParentModule() == null) return;
-
-        for (Project module : extension.getModules()) {
-            File buildDir = new File(module.getBuildDir(), ConfigurationProperty.BASE_DIR);
-            if (!buildDir.exists()) buildDir.mkdirs();
-        }
+        this.createBuildDir(extension.getParentModule());
 
         if (extension.getExportType().equals(ExportType.YAML)) {
             File parentLibFile = new File(extension.getParentModule().getBuildDir() + File.separator + ConfigurationProperty.BASE_DIR,"libs.yml");
@@ -45,6 +41,11 @@ public abstract class BundleLibrariesTask extends DefaultTask {
             ConfigurationWriter writer = new ConfigurationWriter(parentLibFile, bundled);
             writer.writeJSON();
         }
+    }
+
+    private void createBuildDir(Project project) {
+        final File buildDir = new File(project.getBuildDir(), ConfigurationProperty.BASE_DIR);
+        if (!buildDir.exists()) buildDir.mkdirs();
     }
 
     private Configuration bundleYAML(File parentLibFile) {
